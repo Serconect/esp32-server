@@ -1,5 +1,4 @@
-from flask import render_template
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import sqlite3
 from datetime import datetime
 
