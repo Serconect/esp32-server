@@ -1,0 +1,13 @@
+@app.route('/dashboard')
+def dashboard():
+    conn = sqlite3.connect('datos.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM registros ORDER BY timestamp DESC LIMIT 50')
+    rows = c.fetchall()
+    conn.close()
+
+    html = "<h2>Últimos registros</h2><table border='1'><tr><th>Fecha</th><th>Temp (°C)</th><th>Humedad (%)</th><th>Vibración</th></tr>"
+    for row in rows:
+        html += f"<tr><td>{row[1]}</td><td>{row[2]}</td><td>{row[3]}</td><td>{row[4]}</td></tr>"
+    html += "</table>"
+    return html
