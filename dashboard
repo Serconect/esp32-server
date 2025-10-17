@@ -2,12 +2,15 @@
 def dashboard():
     conn = sqlite3.connect('datos.db')
     c = conn.cursor()
-    c.execute('SELECT * FROM registros ORDER BY timestamp DESC LIMIT 50')
+    c.execute('SELECT timestamp, temperatura, humedad, vibracion FROM registros ORDER BY timestamp DESC LIMIT 20')
     rows = c.fetchall()
     conn.close()
 
-    html = "<h2>Últimos registros</h2><table border='1'><tr><th>Fecha</th><th>Temp (°C)</th><th>Humedad (%)</th><th>Vibración</th></tr>"
-    for row in rows:
-        html += f"<tr><td>{row[1]}</td><td>{row[2]}</td><td>{row[3]}</td><td>{row[4]}</td></tr>"
-    html += "</table>"
-    return html
+    rows.reverse()  # Para mostrar en orden cronológico
+
+    labels = [r[0][11:19] for r in rows]  # Solo hora
+    temp = [r[1] for r in rows]
+    hum = [r[2] for r in rows]
+    vib = [r[3] for r in rows]
+
+    return render_template("dashboard.html", labels=labels, temp=temp, hum=hum, vib=vib)
